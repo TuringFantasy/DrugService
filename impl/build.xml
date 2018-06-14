@@ -1,0 +1,95 @@
+<project name="DrugService" basedir="." default="deploy">
+
+    <property environment="env"/>
+
+    <!-- The final name of the distributable -->
+    <property name="dist.name" value="DrugService-impl"/>
+
+    <property name="src.root.dir" value="${basedir}/src"/>
+    <property name="src.main.py.dir" value="${src.root.dir}/main/py"/>
+    <property name="src.main.resources.dir" value="${src.root.dir}/main/resources"/>
+    <property name="src.main.lib.dir" value="${src.root.dir}/main/lib"/>
+    <property name="src.test.py.dir" value="${src.root.dir}/test/py"/>
+    <property name="src.test.resources.dir" value="${src.root.dir}/test/resources"/>
+    <property name="src.test.lib.dir" value="${src.root.dir}/test/lib"/>
+    <property name="dist.dir" value="${basedir}/dist"/>
+
+    <!-- Clean the generated content -->
+    <target name="clean">
+        <delete dir="${dist.dir}"/>
+    </target>
+
+    <!-- Setup the necessary directories and other initialization -->
+    <target name="init" depends="clean">
+        <fail unless="env.MACAW_SDK_HOME" message="Please set the MACAW_SDK_HOME environment variable to point to the path of the relevant Macaw SDK root directory"/>
+        <echo message="Using MACAW_SDK_HOME ${env.MACAW_SDK_HOME}"/>
+        <property name="macaw-service-runtime-binary" value="${env.MACAW_SDK_HOME}/runtime/macaw-service-python-runtime.tar.gz"/>
+        <mkdir dir="${dist.dir}/${dist.name}" />
+        <!-- Untar the service runtime distribution -->
+        <untar compression="gzip" src="${macaw-service-runtime-binary}" dest="${dist.dir}/${dist.name}"/>
+    </target>
+
+    <target name="dist" depends="init" description="Generates the binary distribution of this project">
+        <mkdir dir="${dist.dir}/${dist.name}" />
+        <!-- Untar the service runtime distribution -->
+        <untar compression="gzip" src="${macaw-service-runtime-binary}" dest="${dist.dir}/${dist.name}"/>
+        <!-- Once untarred, we no longer need it -->
+        <delete file="${dist.dir}/macaw-service-python-runtime.tar.gz"/>
+        <!-- replace the "program-name" placeholder value in the startup scripts -->
+        <replace dir="${dist.dir}/${dist.name}/bin" casesensitive="false" token="@program-name@" value="DrugService-impl">
+            <include name="startup.sh"/>
+            <include name="startup.bat"/>
+        </replace>
+        <!-- replace the "program-name" placeholder value in the sidecar startup scripts -->
+        <replace dir="${dist.dir}/${dist.name}/sidecar/bin" casesensitive="false" token="@program-name@" value="DrugService-impl-sidecar">
+            <include name="startup.sh"/>
+            <include name="startup.bat"/>
+        </replace>
+
+        <!-- Make sure the .sh have the correct permissions -->
+        <chmod perm="755">
+            <fileset dir="${dist.dir}/${dist.name}">
+                <include name="**/*.sh"/>
+            </fileset>
+        </chmod>
+
+        <!-- Copy over the service specific artifacts to the python directory -->
+        <copy todir="${dist.dir}/${dist.name}/py">
+            <fileset dir="${src.main.py.dir}"/>
+            <fileset dir="${src.main.resources.dir}">
+                <exclude name="service-info.xml"/>
+            </fileset>
+        </copy>
+
+        <property name="sidecar-services-root-dir" value="${dist.dir}/${dist.name}/sidecar/services"/>
+        <copy todir="${sidecar-services-root-dir}/${dist.name}" file="${src.main.resources.dir}/service-info.xml"/>
+        <mkdir dir="${sidecar-services-root-dir}/${dist.name}/META-INF"/>
+        <manifest file="${sidecar-services-root-dir}/${dist.name}/META-INF/MANIFEST.MF">
+            <attribute name="Dependencies" value="io.macaw.macaw-service-sidecar"/>
+        </manifest>
+        <!-- service specific dependencies go into the lib folder of the sidecar service -->
+        <copy todir="${sidecar-services-root-dir}/${dist.name}/lib">
+            <fileset dir="${src.main.lib.dir}" />
+        </copy>
+
+    </target>
+
+    <target name="tar" depends="dist">
+        <tar destfile="${dist.dir}/${dist.name}.tar.gz" compression="gzip">
+            <tarfileset dir="${dist.dir}/${dist.name}">
+                <exclude name="bin/**/*.sh"/>
+                <exclude name="sidecar/bin/**/*.sh"/>
+            </tarfileset>
+            <tarfileset dir="${dist.dir}/${dist.name}" filemode="755">
+                <include name="bin/**/*.sh"/>
+                <include name="sidecar/bin/**/*.sh"/>
+            </tarfileset>
+        </tar>
+    </target>
+
+    <target name="deploy" depends="tar" description="Deploy the service to the service runtime">
+    </target>
+
+</project>
+
+

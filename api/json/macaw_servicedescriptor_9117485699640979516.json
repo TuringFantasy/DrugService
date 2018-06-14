@@ -1,0 +1,117 @@
+
+{
+    "service":{
+        "namespace":"io.zolontech",
+        "name":"DrugService",
+        "version":"1.0.0",
+        "description":"Microservice to get FDA Drug Details and Events",
+        "apis":[
+            {
+                "name":"get-drugs",
+                "description":"Get Drug details from FDA Site",
+                "inputs":[
+                    {
+                        "name":"limit",
+                        "type":"int32",
+                        "description":"Limit the number of drugs to be obtained in one API Call"
+                    },
+                    {
+                        "name":"offset",
+                        "type":"int32",
+                        "description":"Offset for fetching the drugs from the backend"
+                    }
+                ],
+                "output":{
+                    "name":"drugs",
+                    "type":"string",
+                    "description":"Returns JSON representation of Drugs information"
+                }
+            },
+            {
+                "name":"get-drug-by-brand",
+                "description":"Search Drug by brand name from FDA Site",
+                "inputs":[
+                    {
+                        "name":"brand-name",
+                        "type":"string",
+                        "description":"Brand name of the drug"
+                    },
+                    {
+                        "name":"limit",
+                        "type":"int32",
+                        "description":"Limit the number of drugs to be obtained in one API Call"
+                    },
+                    {
+                        "name":"offset",
+                        "type":"int32",
+                        "description":"Offset for fetching the drugs from the backend"
+                    }
+                ],
+                "output":{
+                    "name":"drug",
+                    "type":"string",
+                    "description":"Returns JSON representation of Drug information"
+                }
+            },
+            {
+                "name":"search-drug-by-name",
+                "description":"Search Drug by Name from FDA Site",
+                "inputs":[
+                    {
+                        "name":"name",
+                        "type":"string",
+                        "description":"Name of the drug"
+                    },
+                    {
+                        "name":"limit",
+                        "type":"int32",
+                        "description":"Limit the number of drugs to be obtained in one API Call"
+                    },
+                    {
+                        "name":"offset",
+                        "type":"int32",
+                        "description":"Offset for fetching the drugs from the backend"
+                    }
+                ],
+                "output":{
+                    "name":"drug",
+                    "type":"string",
+                    "description":"Returns JSON representation of Drug information"
+                }
+            },
+            {
+                "name":"get-user-events-for-drug",
+                "description":"Get All User events for a given drug name from FDA Site",
+                "inputs":[
+                    {
+                        "name":"drug-name",
+                        "type":"string",
+                        "description":"name of the drug"
+                    },
+                    {
+                        "name":"limit",
+                        "type":"int32",
+                        "description":"Limit the number of drugs to be obtained in one API Call"
+                    },
+                    {
+                        "name":"offset",
+                        "type":"int32",
+                        "description":"Offset for fetching the drugs from the backend"
+                    }
+                ],
+                "output":{
+                    "name":"user-events",
+                    "type":"string",
+                    "description":"Returns JSON array of User events associated with the drug"
+                }
+            }
+        ],
+        "options":{
+            "code-gen":{
+                "java":{
+                    "package-name":"io.zolontech.drugservice"
+                }
+            }
+        }
+    }
+}

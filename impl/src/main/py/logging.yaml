@@ -1,0 +1,38 @@
+version: 1
+disable_existing_loggers: True
+formatters:
+    macaw:
+        format: "%(asctime)s [%(name)s:%(funcName)s:%(threadName)s] %(levelname)s - %(message)s"
+handlers:
+    console_handler:
+        class: logging.StreamHandler
+        level: INFO
+        formatter: macaw
+        stream: ext://sys.stdout
+    logfile_handler:
+        class: logging.handlers.RotatingFileHandler
+        level: DEBUG
+        formatter: macaw
+        filename: !logfilename macawservice.log
+        maxBytes: 10485760
+        backupCount: 20
+        encoding: utf8
+loggers:
+    macawservicemain:
+        level: DEBUG
+        handlers: [console_handler, logfile_handler]
+        qualname: macawservicemain
+        propagate: False
+    macawservice:
+        level: DEBUG
+        handlers: [console_handler, logfile_handler]
+        qualname: macawservicemain
+        propagate: False
+    FDADrugAccess:
+        level: DEBUG
+        handlers: [console_handler, logfile_handler]
+        qualname: FDADrugAccess
+        propagate: False
+root:
+    level: DEBUG
+    handlers: [console_handler, logfile_handler]

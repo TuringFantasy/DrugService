@@ -1,0 +1,36 @@
+{
+ "id": "d4b21d44-472e-54e0-bb45-bde3245e6b79", 
+ "name": "Macaw Service Blueprint for DrugService", 
+ "description": "Macaw Service Blueprint for DrugService", 
+ "category": "Macaw Services", 
+ "tag": "MicroServices", 
+ "icon": "microservices", 
+ "published": {
+  "date": "2018-06-14T20:26:26.183433", 
+  "organization": "macaw.io", 
+  "user": "macaw"
+ }, 
+ "revision": "1.0", 
+ "services": [
+  {
+   "minQuantity": 0, 
+   "configDescriptors": [], 
+   "volumes": [], 
+   "service-version": "1.0.0", 
+   "defaultQuantity": 1, 
+   "service-name": "DrugService", 
+   "id": "DrugService", 
+   "name": "drugservice-v1.0.0", 
+   "exposePorts": [], 
+   "service-namespace": "io.zolontech", 
+   "maxQuantity": 8
+  }
+ ], 
+ "webapps": [], 
+ "dependencies": [], 
+ "deployment": {
+  "order": [
+   "DrugService"
+  ]
+ }
+}

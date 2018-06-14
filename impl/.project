@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>DrugService</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.python.pydev.PyDevBuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>org.eclipse.ui.externaltools.ExternalToolBuilder</name>
+			<triggers>full,incremental,</triggers>
+			<arguments>
+				<dictionary>
+					<key>LaunchConfigHandle</key>
+					<value>&lt;project&gt;/.externalToolBuilders/DrugService_builder.launch</value>
+				</dictionary>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>io.macaw.eclipse.plugin.macawProjectNature</nature>
+		<nature>org.python.pydev.pythonNature</nature>
+	</natures>
+	<linkedResources>
+		<link>
+			<name>Jenkinsfile</name>
+			<type>1</type>
+			<location>/Users/ravjanga/Documents/zolonTech/microservices/DrugService/Jenkinsfile</location>
+		</link>
+		<link>
+			<name>model</name>
+			<type>2</type>
+			<location>/Users/ravjanga/Documents/zolonTech/microservices/DrugService/api/json</location>
+		</link>
+	</linkedResources>
+</projectDescription>
